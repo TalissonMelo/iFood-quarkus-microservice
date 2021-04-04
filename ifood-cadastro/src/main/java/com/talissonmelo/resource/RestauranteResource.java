@@ -2,10 +2,8 @@ package com.talissonmelo.resource;
 
 import com.talissonmelo.entity.Restaurante;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.transaction.Transactional;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -17,5 +15,11 @@ public class RestauranteResource {
     @GET
     public List<Restaurante> findAll(){
         return Restaurante.listAll();
+    }
+
+    @POST
+    @Transactional
+    public void adicionar(Restaurante dto){
+        dto.persist();
     }
 }
