@@ -1,8 +1,6 @@
 package com.talissonmelo.resource;
 
-import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.talissonmelo.entity.Restaurante;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
@@ -32,10 +30,22 @@ public class RestauranteResource {
     public void atualizar(@PathParam("idRestaurante") Long idRestaurante, Restaurante dto){
         Optional<Restaurante> restauranteAtualizar = Restaurante.findByIdOptional(idRestaurante);
        if (restauranteAtualizar.isEmpty()){
-           throw  new NotFoundException();
+           throw new NotFoundException();
        }
        Restaurante restaurante = restauranteAtualizar.get();
        restaurante.nome = dto.nome;
        restaurante.persist();
+    }
+
+    @DELETE
+    @Path("{idRestaurante}")
+    @Transactional
+    public void deletar(@PathParam("idRestaurante") Long idRestaurante) {
+        Optional<Restaurante> restaurante = Restaurante.findByIdOptional(idRestaurante);
+        if(restaurante.isEmpty()) {
+            throw  new NotFoundException();
+        }
+        Restaurante.deleteById(restaurante.get().id);
+
     }
 }
