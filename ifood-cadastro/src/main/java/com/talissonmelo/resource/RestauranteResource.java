@@ -19,6 +19,16 @@ public class RestauranteResource {
         return Restaurante.listAll();
     }
 
+    @GET
+    @Path("{idRestaurante}")
+    public Restaurante buscarRestauranteId(@PathParam("idRestaurante") Long idRestuarante){
+        Optional<Restaurante> restaurante = Restaurante.findByIdOptional(idRestuarante);
+        if (restaurante.isEmpty()){
+            throw new NotFoundException();
+        }
+        return restaurante.get();
+    }
+
     @POST
     @Transactional
     public Response adicionar(Restaurante dto){
@@ -48,6 +58,5 @@ public class RestauranteResource {
             throw  new NotFoundException();
         }
         Restaurante.deleteById(restaurante.get().id);
-
     }
 }
