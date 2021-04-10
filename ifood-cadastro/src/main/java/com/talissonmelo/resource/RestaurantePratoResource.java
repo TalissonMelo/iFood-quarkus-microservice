@@ -56,4 +56,19 @@ public class RestaurantePratoResource {
         pratoAtualiza.persist();
         return Response.status(Response.Status.CREATED).build();
     }
+
+    @DELETE
+    @Path("{idRestaurante}/pratos/{idPrato}")
+    @Transactional
+    public void deletarPrato(@PathParam("idRestaurante") Long idRestaurante, @PathParam("idPrato") Long idPrato){
+        Optional<Restaurante> restaurante = Restaurante.findByIdOptional(idRestaurante);
+        if(restaurante.isEmpty()){
+            throw  new NotFoundException();
+        }
+        Optional<Prato> prato = Prato.findByIdOptional(idPrato);
+
+        prato.ifPresentOrElse(Prato::delete, () -> {
+            throw new NotFoundException();
+        });
+    }
 }
