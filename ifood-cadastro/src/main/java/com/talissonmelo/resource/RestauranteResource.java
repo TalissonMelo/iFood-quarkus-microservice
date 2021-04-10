@@ -1,8 +1,11 @@
 package com.talissonmelo.resource;
 
+import com.talissonmelo.dto.AdicionarRestauranteDto;
+import com.talissonmelo.entity.Localizacao;
 import com.talissonmelo.entity.Restaurante;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -31,8 +34,16 @@ public class RestauranteResource {
 
     @POST
     @Transactional
-    public Response adicionar(Restaurante dto){
-        dto.persist();
+    public Response adicionar(@Valid AdicionarRestauranteDto dto){
+        Localizacao localizacao = new Localizacao();
+        localizacao.latitude = dto.localizacao.latitude;
+        localizacao.longitude = dto.localizacao.longitude;
+        Restaurante restaurante = new Restaurante();
+        restaurante.proprietario = dto.proprietario;
+        restaurante.cnpj = dto.cnpj;
+        restaurante.nome = dto.nome;
+        restaurante.localizacao = localizacao;
+        restaurante.persist();
         return Response.status(Response.Status.CREATED).build();
     }
 
