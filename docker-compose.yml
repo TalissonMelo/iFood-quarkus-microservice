@@ -8,3 +8,14 @@ services:
       POSTGRES_PASSWORD: 1234567
     ports:
       - "5432:5432"
+
+version: "3.7"
+services:
+  postgres_marketplace:
+    container_name: postgres_marketplace_ifood
+    image: postgres:12.2
+    environment: 
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 1234567
+    ports:
+      - "5433:5432"
