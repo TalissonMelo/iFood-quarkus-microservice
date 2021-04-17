@@ -6,6 +6,7 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
+import io.vertx.sqlclient.Tuple;
 
 import java.math.BigDecimal;
 import java.util.stream.StreamSupport;
