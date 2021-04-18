@@ -19,3 +19,11 @@ services:
       POSTGRES_PASSWORD: 1234567
     ports:
       - "5433:5432"
+
+ artemis_ifood:
+    container_name: artemis_ifood
+    image: vromero/activemq-artemis:2.11.0
+    network_mode: "host"
+    environment: 
+      ARTEMIS_USERNAME: admin
+      ARTEMIS_PASSWORD: admin
