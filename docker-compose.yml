@@ -1,3 +1,6 @@
+# Projeto Cadastro
+# BANCO Postgres
+
 version: "3.7"
 services:
   postgres_cadastro:
@@ -8,6 +11,9 @@ services:
       POSTGRES_PASSWORD: 1234567
     ports:
       - "5432:5432"
+
+# Projeto Marketplace
+# BANCO Postgres
 
 version: "3.7"
 services:
@@ -20,6 +26,8 @@ services:
     ports:
       - "5433:5432"
 
+# RabbitMQ
+
  artemis_ifood:
     container_name: artemis_ifood
     image: vromero/activemq-artemis:2.11.0
@@ -27,3 +35,16 @@ services:
     environment: 
       ARTEMIS_USERNAME: admin
       ARTEMIS_PASSWORD: admin
+
+# Projeto Pedido
+# BANCO MONGO DB
+
+mongodb_ifood:
+    container_name: mongodb_ifood
+    image: mongo:4.2.5-bionic
+    ports:
+      - "27017:27017"
+    environment: 
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+      MONGO_INITDB_DATABASE: pedido
