@@ -3,7 +3,13 @@ package com.talissonmelo.resource;
 import com.talissonmelo.dto.AdicionarRestauranteDto;
 import com.talissonmelo.entity.Localizacao;
 import com.talissonmelo.entity.Restaurante;
+import io.quarkus.vertx.http.runtime.devmode.Json;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 
+import javax.inject.Inject;
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -16,6 +22,10 @@ import java.util.Optional;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class RestauranteResource {
+
+    @Inject
+    @Channel("restaurantes")
+    Emitter<String> emitter;
 
     @GET
     public List<Restaurante> findAll(){
@@ -44,6 +54,9 @@ public class RestauranteResource {
         restaurante.nome = dto.nome;
         restaurante.localizacao = localizacao;
         restaurante.persist();
+        Jsonb criar = JsonbBuilder.create();
+        String json = criar.toJson(restaurante);
+        emitter.send(json);
         return Response.status(Response.Status.CREATED).build();
     }
 
