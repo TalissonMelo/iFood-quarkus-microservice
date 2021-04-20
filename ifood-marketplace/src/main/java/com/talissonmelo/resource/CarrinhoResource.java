@@ -5,10 +5,7 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -25,5 +22,14 @@ public class CarrinhoResource {
     @GET
     public Uni<List<PratoCarrinho>> buscarPrato() {
         return PratoCarrinho.buscarCarrinho(pgPool, CLIENTE);
+    }
+
+    @POST
+    @Path("/prato/{idPrato}")
+    public Uni<Long> adicionarPrato(@PathParam("idPrato") Long idPrato) {
+        PratoCarrinho pratoCarrinho = new PratoCarrinho();
+        pratoCarrinho.usuario = CLIENTE;
+        pratoCarrinho.prato = idPrato;
+        return PratoCarrinho.salvar(pgPool,CLIENTE,idPrato);
     }
 }
