@@ -24,4 +24,10 @@ public class Prato {
             return StreamSupport.stream(rowSet.spliterator(),false);
         })).onItem().apply(PratoDto::from);
     }
+
+    public static Uni<PratoDto> buscarPratoId(PgPool pgPool, Long id) {
+        return pgPool.preparedQuery("SELECT * FROM prato WHERE id = $1").execute((io.vertx.mutiny.sqlclient.Tuple) Tuple.of(id))
+            .map(RowSet::iterator)
+            .map(iterator -> iterator.hasNext() ? PratoDto.from(iterator.next()) : null);
+    }
 }

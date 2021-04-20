@@ -34,4 +34,9 @@ public class PratoCarrinho {
         return pgPool.preparedQuery("INSERT INTO prato_cliente (cliente, prato) VALUES ($1, $2) RETURNING (cliente)").execute(
                 Tuple.of(cliente, idPrato)).map(pgRowSet -> pgRowSet.iterator().next().getLong("cliente"));
     }
+
+    public static Uni<Boolean> deletar(PgPool pgPool, String cliente) {
+        return pgPool.preparedQuery("DELETE FROM prato_cliente WHERE cliente = $1").execute(Tuple.of(cliente))
+                .map(pgRowSet -> pgRowSet.rowCount() == 1);
+    }
 }
