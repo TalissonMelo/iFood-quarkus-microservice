@@ -8,6 +8,8 @@ import com.talissonmelo.model.Prato;
 import com.talissonmelo.model.PratoCarrinho;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -24,6 +26,10 @@ public class CarrinhoResource {
 
     @Inject
     PgPool pgPool;
+
+    @Inject
+    @Channel("pedidos")
+    Emitter<PedidoRealizadoDto> emitter;
 
     @GET
     public Uni<List<PratoCarrinho>> buscarPrato() {
@@ -48,10 +54,10 @@ public class CarrinhoResource {
         List<PratoCarrinho> pratoCarrinho = PratoCarrinho.buscarCarrinho(pgPool, cliente).await().indefinitely();
         List<PratoPedidoDto> pratos = pratoCarrinho.stream().map(pc -> from(pc)).collect(Collectors.toList());
         pedido.pratos = pratos;
-
         RestauranteDto restaurante = new RestauranteDto();
         restaurante.nome = "nome restaurante";
         pedido.restaurante = restaurante;
+        emitter.send(pedido);
         return PratoCarrinho.deletar(pgPool, cliente);
     }
 
