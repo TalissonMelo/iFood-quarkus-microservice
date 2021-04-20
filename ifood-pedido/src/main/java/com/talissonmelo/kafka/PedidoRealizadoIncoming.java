@@ -18,7 +18,7 @@ public class PedidoRealizadoIncoming {
         Pedido pedido = new Pedido();
         pedido.cliente = dto.cliente;
         pedido.pratos = new ArrayList<>();
-        dto.pratos.forEach(prato -> p.pratos.add(from(prato)));
+        dto.pratos.forEach(prato -> pedido.pratos.add(from(prato)));
         Restaurante restaurante = new Restaurante();
         restaurante.nome = dto.restaurante.nome;
         pedido.restaurante = restaurante;
